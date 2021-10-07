@@ -11,11 +11,13 @@ public class Main {
     private static final Scanner scan = new Scanner(System.in);
 
     public static void main(String[] args) {
-        days_before_years_start();
+        polynomial_squares_degree_2();
         scan.close();
     }
 
     public static void poker() {
+        int score = 0;
+
         System.out.print("A : ");
         int a = scan.nextInt();
         System.out.print("B : ");
@@ -24,27 +26,6 @@ public class Main {
         int c = scan.nextInt();
         System.out.print("D : ");
         int d = scan.nextInt();
-
-        if(a == b && b == c && c == d) {
-            System.out.println("C'est un carré !");
-        }/* else if(a == b && b == c && c != d) {
-            System.out.println("C'est un brelin !");
-        }*/
-        int[] arr = {a, b, c, d};
-
-        for(int i : arr) {
-            if(Arrays.stream(arr).anyMatch(dist -> dist == i)) {
-                System.out.println("C'est un brelan");
-                break;
-            }
-        }
-        if(a == b && b != c && c != d) {
-            System.out.println("C'est une paire !");
-        } else if(a == b && b != c /*&& c == d*/) {
-            System.out.println("C'est une double paire !");
-        } else if(a != b && b != c && c != d) {
-            System.out.println("Pas de chance !");
-        }
     }
 
     public static void even_numbers_count() {
@@ -76,7 +57,7 @@ public class Main {
         System.out.println("La plus grande valeur est » " + max);
     }
 
-    public static void polynom_squares_degree_2() {
+    public static void polynomial_squares_degree_2() {
         System.out.print("Valeur de a : ");
         double a = scan.nextDouble();
         System.out.print("Valeur de b : ");
@@ -84,38 +65,51 @@ public class Main {
         System.out.print("Valeur de c : ");
         double c = scan.nextDouble();
 
-        double disc = b * b - 4 * a * c;
+        double delta = b * b - 4 * a * c;
 
-        if(disc < 0) {
+        if(delta < 0) {
             System.out.println("Aucune solution réelle");
             return;
         }
-        double t1 = (-b - Math.sqrt(disc)) / (2 * a);
-        double t2 = (-b + Math.sqrt(disc)) / (2 * a);
+        double t = 0, t1 = 0, t2 = 0;
+
+        if(a != 0) {
+            if(delta == 0) {
+                t = -b / 2 * a;
+            } else {
+                t1 = (-b - Math.sqrt(delta)) / (2 * a);
+                t2 = (-b + Math.sqrt(delta)) / (2 * a);
+            }
+        } else t = -c;
 
         System.out.println("Les solutions de l'équation du second degré " +
-                a + "x² + " + b + "x + " + c + " sont " +
+                a + "x² + " + b + "x + " + c + (delta > 0 || a != 0 ? " sont " +
                 Math.round(t1 * 100.0) / 100.0 + " et " +
-                Math.round(t2 * 100.0) / 100.0
+                Math.round(t2 * 100.0) / 100.0 : " est " +
+                Math.round(t * 100.0) / 100.0)
         );
     }
 
-    public static void polynom_squares_degree_3() {
+    public static void polynomial_squares_degree_3() {
         int count = 0;
 
         System.out.print("Valeur de a : ");
-        double a = scan.nextDouble();
+        double a = 1; //scan.nextDouble();
         System.out.print("Valeur de b : ");
-        double b = scan.nextDouble();
+        double b = -3; //scan.nextDouble();
         System.out.print("Valeur de c : ");
-        double c = scan.nextDouble();
+        double c = 1; //scan.nextDouble();
         System.out.print("Valeur de d : ");
-        double d = scan.nextInt();
+        double d = 1; //scan.nextInt();
 
         System.out.println("Voici les solutions de " + a + "x^3 + " + b + "x^2 + " + c + "x + " + d + " :");
-        for(int i = -100; i < 100; i++) {
-            if(count >= 3) break;
-            boolean equals = Math.pow(a, 3) + Math.pow(b, 2) + c + d == i;
+        for(int i = -3; i <= 3; i++) {
+            if(count >= 3) {
+                break;
+            }
+            double result = i * Math.pow(a, 3) + i * Math.pow(b, 2) + i * c + d;
+            System.out.println(result);
+            boolean equals = Util.round(result, 3) == 0;
 
             if(equals) {
                 System.out.println("» " + i);
